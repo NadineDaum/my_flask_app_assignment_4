@@ -71,3 +71,23 @@ def before_request_func():
         db.session.add(ip_view)  # insert into the ip_view table
 
     db.session.commit()  # commit all the changes to the database
+
+    from flask import render_template
+from flaskapp.models import UkData
+from flaskapp import app, db
+
+@app.route('/visual1')
+def visual_1():
+    data = db.session.query(
+        db.func.sum(UkData.ConVote19).label('Conservative'),
+        db.func.sum(UkData.LabVote19).label('Labour'),
+        db.func.sum(UkData.LDVote19).label('LibDem'),
+        db.func.sum(UkData.SNPVote19).label('SNP'),
+        db.func.sum(UkData.PCVote19).label('PlaidCymru'),
+        db.func.sum(UkData.GreenVote19).label('Green')
+    ).first()
+
+    party_names = data._fields
+    vote_totals = list(data)
+
+    return render_template('visual_1.html', labels=party_names, values=vote_totals)

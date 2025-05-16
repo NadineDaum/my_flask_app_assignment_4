@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>2019 UK General Election: Total Votes by Party</h2>
+  <canvas id="votesChart" width="600" height="400"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('votesChart').getContext('2d');
+    const votesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels|tojson }},
+            datasets: [{
+                label: 'Total Votes',
+                data: {{ values|tojson }},
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+  </script>
+{% endblock %}
